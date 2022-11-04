@@ -234,10 +234,14 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public List<Film> getRecommendations(Integer idRecommendedUser, Integer idUserWithClosestInterests) {
 
-        String sql = "SELECT fl.film_id " +
+     /*   String sql = "SELECT fl.film_id " +
                 "FROM films_likes AS fl " +
                 "WHERE fl.user_id IN (" + idUserWithClosestInterests + ") " +
-                "AND fl.user_id NOT IN (" + idRecommendedUser + ")";
+                "AND fl.user_id NOT IN (" + idRecommendedUser + ")";*/
+
+        String sql = " SELECT fl_1.film_id " +
+                "FROM films_likes AS fl_1 JOIN films_likes fl_2 on fl_1.user_id = fl_2.user_id" +
+                " WHERE fl_1.user_id = ? AND fl_2.user_id = ? and fl_1.film_id != fl_2.film_id";
 
         return jdbcTemplate.query(sql, FilmMapper::mapToFilm, idUserWithClosestInterests, idRecommendedUser);
     }
