@@ -4,9 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,9 +17,12 @@ import java.util.List;
 public class UserService {
     private final UserStorage userStorage;
 
+    private final FilmStorage filmStorage;
+
     @Autowired
-    public UserService(@Qualifier("userDbStorage") UserStorage userStorage) {
+    public UserService(@Qualifier("userDbStorage") UserStorage userStorage, FilmStorage filmStorage) {
         this.userStorage = userStorage;
+        this.filmStorage = filmStorage;
     }
 
     public void addFriend(Integer id, Integer friendId) {
@@ -58,4 +64,19 @@ public class UserService {
     public void deleteAllUsers() {
         userStorage.deleteAll();
     }
+
+    public List<Film> getRecommendations(Integer id) {
+        if (getIdUsersWithSimilarInterests(id).isEmpty()) {
+            return new ArrayList<>();
+        }
+        Integer idUserWithClosestInterests = getIdUsersWithSimilarInterests(id).get(0);
+        List<Film> recommendationsFilms = filmStorage.getRecommendations(id, idUserWithClosestInterests);
+        return recommendationsFilms;
+
+    }
+
+    public List<Integer> getIdUsersWithSimilarInterests(int id) {
+        return userStorage.getIdUsersWithSimilarInterests(id);
+    }
+
 }

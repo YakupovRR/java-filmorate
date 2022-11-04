@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.storage.film;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 
+@Primary
 @Component("filmDbStorage")
 @Slf4j
 public class FilmDbStorage implements FilmStorage {
@@ -227,5 +229,16 @@ public class FilmDbStorage implements FilmStorage {
             throw new NotFoundException("id", String
                     .format("film with id %d does not exists", id));
         }
+    }
+
+    @Override
+    public List<Film> getRecommendations(Integer idRecommendedUser, Integer idUserWithClosestInterests) {
+
+        String sql = "SELECT fl.film_id " +
+                "FROM films_likes AS fl " +
+                "WHERE fl.user_id IN (" + idUserWithClosestInterests + ") " +
+                "AND fl.user_id NOT IN (" + idRecommendedUser + ")";
+
+        return jdbcTemplate.query(sql, FilmMapper::mapToFilm, idUserWithClosestInterests, idRecommendedUser);
     }
 }

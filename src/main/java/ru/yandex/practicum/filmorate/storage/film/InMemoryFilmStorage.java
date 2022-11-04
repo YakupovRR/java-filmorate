@@ -89,4 +89,9 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
         return idList.get(idList.size() - 1) + 1;
     }
+
+    @Override
+    public List<Film> getRecommendations(Integer id, Integer idUserWithClosestInterests) {
+        throw new NotFoundException("Метод рекомендации", "Метод не реализован");
+    }
 }

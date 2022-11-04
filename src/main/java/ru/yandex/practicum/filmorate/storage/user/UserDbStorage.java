@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Primary
 @Component("userDbStorage")
 @Slf4j
 public class UserDbStorage implements UserStorage {
@@ -156,5 +158,17 @@ public class UserDbStorage implements UserStorage {
             throw new NotFoundException("id", String
                     .format("user with id %d does not exists", id));
         }
+    }
+
+    @Override
+    public List<Integer> getIdUsersWithSimilarInterests(Integer userId) {
+
+        String sql = "SELECT fl2.user_id " +
+                "FROM films_likes AS fl1 JOIN films_likes AS fl2 ON fl1.film_id = fl2.film_id " +
+                "WHERE fl1.user_id = ? AND fl1.user_id<>fl2.user_id " +
+                "GROUP BY fl1.user_id , fl2.user_id " +
+                "ORDER BY COUNT(fl1.film_id) DESC ";
+
+        return jdbcTemplate.queryForList(sql, Integer.class, userId);
     }
 }

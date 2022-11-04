@@ -10,4 +10,7 @@ public interface FilmStorage extends EntityStorage<Film> {
     void addLike(Integer filmId, Integer userId);
     void deleteLike(Integer filmId, Integer userId);
     List<Film> getFilmsTop(Integer count);
+
+    List<Film> getRecommendations(Integer id, Integer idUserWithClosestInterests);
+
 }

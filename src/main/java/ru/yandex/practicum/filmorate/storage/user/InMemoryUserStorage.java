@@ -1,8 +1,10 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.*;
@@ -102,5 +104,10 @@ public class InMemoryUserStorage implements UserStorage {
                 .filter(friendsSet::contains)
                 .map(users::get)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Integer> getIdUsersWithSimilarInterests(Integer id) {
+        throw new NotFoundException("Метод поиск пользователя с похожими интересами", "Метод не реализован");
     }
 }
