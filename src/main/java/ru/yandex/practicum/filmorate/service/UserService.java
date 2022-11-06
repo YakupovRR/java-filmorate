@@ -70,7 +70,7 @@ public class UserService {
             return new ArrayList<>();
         }
         Integer idUserWithClosestInterests = getIdUsersWithSimilarInterests(id).get(0);
-        List<Film> recommendationsFilms = filmStorage.getRecommendations(id, idUserWithClosestInterests);
+        List<Film> recommendationsFilms = filmStorage.getRecommendations(idUserWithClosestInterests, id);
         return recommendationsFilms;
 
     }
