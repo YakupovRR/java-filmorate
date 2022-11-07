@@ -66,9 +66,9 @@ public class UserService {
     }
 
     public List<Film> getRecommendations(Integer id) {
-        if (getIdUsersWithSimilarInterests(id).isEmpty()) {
+     /*   if (getIdUsersWithSimilarInterests(id).isEmpty()) {
             return new ArrayList<>();
-        }
+        }*/
         Integer idUserWithClosestInterests = getIdUsersWithSimilarInterests(id).get(0);
         List<Film> recommendationsFilms = filmStorage.getRecommendations(idUserWithClosestInterests, id);
         return recommendationsFilms;
