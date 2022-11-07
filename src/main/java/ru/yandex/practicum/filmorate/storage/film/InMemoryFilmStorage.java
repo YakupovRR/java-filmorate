@@ -91,7 +91,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> getRecommendations(Integer idUserWithClosestInterests, Integer id) {
+    public List<Integer> getRecommendations(Integer idUserWithClosestInterests, Integer idRecommendedUser) {
         throw new NotFoundException("Метод рекомендации", "Метод не реализован");
     }
 }

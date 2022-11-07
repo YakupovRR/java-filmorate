@@ -65,7 +65,8 @@ public class UserController {
     }
 
     @GetMapping("{id}/recommendations")
-    public List<Film> getRecommendations(@PathVariable int id) {
-        return userService.getRecommendations(id);
+    public List<Film> getRecommendations(@PathVariable int id,
+                                         @RequestParam(required = false, defaultValue = "10") Integer limitFilms) {
+        return userService.getRecommendations(id, limitFilms);
     }
 }

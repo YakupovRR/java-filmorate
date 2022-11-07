@@ -169,9 +169,6 @@ public class UserDbStorage implements UserStorage {
                 "GROUP BY fl1.user_id , fl2.user_id " +
                 "ORDER BY COUNT(fl1.film_id) DESC ";
 
-        log.info("recommendations to user id " + userId + "are provided");
-
-
         return jdbcTemplate.queryForList(sql, Integer.class, userId);
     }
 }

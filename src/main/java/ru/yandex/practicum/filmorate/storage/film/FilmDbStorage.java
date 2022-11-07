@@ -232,28 +232,21 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> getRecommendations(Integer idRecommendedUser, Integer idUserWithClosestInterests) {
+    public List<Integer> getRecommendations(Integer idUserWithClosestInterests, Integer idRecommendedUser) {
 
-   /*   String sql = "SELECT * " +
-                "FROM films AS f " +
-                "LEFT JOIN mpa_rating AS mr ON f.MPA_RATE_ID = mr.MPA_RATE_ID " +
-                "WHERE SELECT fl_1.film_id " +
+
+        String sql = "SELECT fl_1.film_id " +
                 "FROM films_likes AS fl_1 " +
                 "WHERE fl_1.user_id = ? " +
                 "EXCEPT " +
                 "SELECT fl_2.film_id " +
                 "FROM films_likes AS fl_2 " +
-                "WHERE fl_2.user_id = ? ";      */
+                "WHERE fl_2.user_id = ?";
 
 
-        String sql = "SELECT * " +
-                "FROM films AS f " +
-                "LEFT JOIN mpa_rating AS mr ON f.MPA_RATE_ID = mr.MPA_RATE_ID " +
-                "WHERE SELECT fl_1.film_id " +
-                "FROM films_likes AS fl_1 " +
-                "JOIN films_likes fl_2 on fl_1.user_id = fl_2.user_id " +
-                "WHERE fl_1.user_id = ? AND fl_2.user_id = ? AND fl_1.film_id != fl_2.film_id";
+        log.info("Made a list of recommended movies based on user id " + idUserWithClosestInterests);
 
-        return jdbcTemplate.query(sql, FilmMapper::mapToFilm, idUserWithClosestInterests, idRecommendedUser);
+        return jdbcTemplate.queryForList(sql, Integer.class, idUserWithClosestInterests, idRecommendedUser);
+
     }
 }
